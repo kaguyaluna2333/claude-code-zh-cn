@@ -14,12 +14,27 @@
 - 翻译引擎可配置：默认 `claude` CLI（零配置开箱即用），支持 OpenAI / Anthropic 兼容协议。
 - 全局译文缓存（按英文原文 hash），插件更新覆盖源文件后自动重应用、不重复调用 LLM。
 - 一键还原（`restore.js --all`），卸载时自动还原英文。
-- 行级 patch + 写前自检，正文 byte-for-byte 不变，绝不写坏 skill；占位符 `${...}` 校验、CRLF 归一化、符号链接默认不跟随。
+- 行级 patch + 写前自检，正文内容不变（CRLF 归一化为 LF），绝不写坏 skill；占位符 `${...}`/`$ARGUMENTS` 校验、符号链接默认不跟随。
+
+### 改进
+
+- 跟进上游 v2.4.62：macOS / Windows native 支持窗口推进到 Claude Code `2.1.190`。
 
 ### 验证
 
-- `node --test tests/skill-i18n-*.test.js`（frontmatter / cjk / cache / metadata / providers 共 45 项）
+- `node --test tests/skill-i18n-*.test.js`（51 项）
 - 真实 `~/.claude` 全量汉化端到端验证
+
+## [2.4.62] - 2026-06-24
+
+### 改进
+
+- macOS / Windows native latest 自动 closeout 跟进 Claude Code `2.1.190`：验证通过后同步支持窗口、README / support matrix 派生产物，并把插件版本推进到 `2.4.62`，合并后可按发布流程创建 `v2.4.62`。
+
+### 验证
+
+- `Native Latest Candidate workflow`
+- `CI preflight`
 
 ## [2.4.61] - 2026-06-21
 
