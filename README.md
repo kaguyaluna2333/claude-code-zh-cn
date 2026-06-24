@@ -2,6 +2,10 @@
 
 # claude-code-zh-cn
 
+> 🔖 **本仓库是 [taekchef/claude-code-zh-cn](https://github.com/taekchef/claude-code-zh-cn) 的 fork。**
+>
+> 在原项目（cli.js 界面汉化、spinner 动词翻译、通知翻译等）基础上，本 fork 新增了 **自动翻译 Skill 和插件 `/` 命令说明** 的功能：安装新的 skill 或插件后，Claude Code 下次启动时会自动把它们的 `/` 命令功能说明翻译成简体中文。详见下方 [Skill / 插件命令说明自动汉化](#skill--插件命令说明自动汉化) 章节。
+
 **Claude Code 简体中文本地化插件**
 
 让终端里的 AI 编程助手说中文 🇨🇳
@@ -300,6 +304,19 @@ powershell -NoProfile -ExecutionPolicy Bypass -File uninstall.ps1
 | `Canoodling` | 腻歪中 | | `Spelunking` | 探洞中 |
 
 > 完整 187 个翻译见 [verbs/zh-CN.json](./verbs/zh-CN.json)
+
+## Skill / 插件命令说明自动汉化
+
+除了 cli.js 界面文字和 spinner，本插件还会**自动汉化 skill 和插件的 `/` 命令功能说明**——安装新 skill/插件后，下次启动 Claude Code 时，它们在 `/` 命令列表、`/skill`、`/plugin` 界面里的描述会自动变成中文。
+
+- **自动触发**：SessionStart hook 后台增量扫描，无需手动操作。
+- **覆盖范围**：用户 skill/command、插件 skill/command、插件元数据（`plugin.json` / `marketplace.json`）。
+- **翻译引擎**：默认用 `claude` CLI（零配置）；可配 OpenAI / Anthropic 兼容 API 加速。
+- **可逆**：原文备份，`restore.js --all` 一键还原，卸载时自动还原。
+
+详细配置（环境变量、API 接入、权衡说明）见 [`plugin/skill-i18n/README.md`](plugin/skill-i18n/README.md)。
+
+> **权衡**：skill 的 `description` 同时用于 `/` 列表显示和 model 自动触发，翻译会影响触发判断（现代 LLM 对中文描述触发良好）。可通过 `ZH_CN_SKILL_I18N_DISABLE=1` 关闭或 `restore.js` 还原。
 
 ## 覆盖了什么
 

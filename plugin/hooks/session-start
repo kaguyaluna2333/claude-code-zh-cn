@@ -716,6 +716,18 @@ fi
 
 repair_settings_from_cache
 
+# Skill/插件命令说明增量汉化（后台异步，不阻塞 hook 输出；新装项下次启动生效）
+if [ "${ZH_CN_SKILL_I18N_DISABLE:-0}" != "1" ] && [ -x "$PLUGIN_ROOT/skill-i18n/translate-skills.sh" ]; then
+    (
+        ZH_CN_SKILL_I18N_HOOK=1 \
+        CLAUDE_PLUGIN_ROOT="$PLUGIN_ROOT" \
+        bash "$PLUGIN_ROOT/skill-i18n/translate-skills.sh" >/dev/null 2>&1
+    ) &
+    SKILL_I18N_PID=$!
+    ( sleep "${ZH_CN_SKILL_I18N_TIMEOUT:-25}"; kill "$SKILL_I18N_PID" 2>/dev/null ) &
+    disown "$SKILL_I18N_PID" 2>/dev/null || true
+fi
+
 # 读取用户输入
 read -r INPUT
 

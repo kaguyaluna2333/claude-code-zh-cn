@@ -6,6 +6,21 @@
 - **次版本号**：新增功能或显著改进（比如新增 patch、新增翻译）
 - **修订号**：Bug 修复和小调整（比如修正一条翻译）
 
+## [2.5.0] - 2026-06-25
+
+### 新增
+
+- **Skill / 插件命令说明自动汉化**：SessionStart hook 后台增量扫描，新装 skill/插件后下次启动自动把 `/` 命令功能说明翻译成中文。覆盖用户与插件的 skill、command，以及插件元数据（`plugin.json` / `marketplace.json`）。
+- 翻译引擎可配置：默认 `claude` CLI（零配置开箱即用），支持 OpenAI / Anthropic 兼容协议。
+- 全局译文缓存（按英文原文 hash），插件更新覆盖源文件后自动重应用、不重复调用 LLM。
+- 一键还原（`restore.js --all`），卸载时自动还原英文。
+- 行级 patch + 写前自检，正文 byte-for-byte 不变，绝不写坏 skill；占位符 `${...}` 校验、CRLF 归一化、符号链接默认不跟随。
+
+### 验证
+
+- `node --test tests/skill-i18n-*.test.js`（frontmatter / cjk / cache / metadata / providers 共 45 项）
+- 真实 `~/.claude` 全量汉化端到端验证
+
 ## [2.4.61] - 2026-06-21
 
 ### 改进
