@@ -663,7 +663,11 @@ if [ -n "$NATIVE_BINARY" ]; then
                                 node "$PLUGIN_ROOT/patch-builtin.js" "$NATIVE_BINARY" 2>/dev/null || true
                                 if command -v codesign >/dev/null 2>&1; then
                                     codesign --force --sign - "$NATIVE_BINARY" 2>/dev/null || true
-                                    codesign --verify --strict "$NATIVE_BINARY" 2>/dev/null || cp "$backup_path" "$NATIVE_BINARY" 2>/dev/null || true
+                                    if ! codesign --verify --strict "$NATIVE_BINARY" 2>/dev/null; then
+                                        # 验签失败：记日志（不静默）+ 从备份恢复
+                                        echo "$(date +%s) patch-builtin codesign verify failed" >> "$PLUGIN_ROOT/.patch-failures.log" 2>/dev/null
+                                        cp "$backup_path" "$NATIVE_BINARY" 2>/dev/null || true
+                                    fi
                                 fi
                             fi
                             VERIFIED_VERSION="$(native_binary_version_from_execution "$NATIVE_BINARY")"
