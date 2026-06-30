@@ -7556,5 +7556,61 @@
   {
     "en": "Add Claude Code GitHub Workflow",
     "zh": "添加 Claude Code GitHub 工作流"
+  },
+  {
+    "en": "Move this session to a new working directory",
+    "zh": "将本会话切换到新的工作目录"
+  },
+  {
+    "en": "Specify files or directories to analyze (overrides config file)",
+    "zh": "指定要分析的文件或目录（覆盖配置文件）"
+  },
+  {
+    "en": "Set model for this FleetView session (not persisted)",
+    "zh": "设置本次 FleetView 会话的模型（不持久化）"
+  },
+  {
+    "en": "Run a command immune to hangups",
+    "zh": "运行不受挂断影响的命令"
+  },
+  {
+    "en": "Type checker for Python",
+    "zh": "Python 类型检查器"
+  },
+  {
+    "en": "Read the current clipboard contents as text. Requires the `clipboardRead` grant.",
+    "zh": "以文本形式读取当前剪贴板内容。需要 `clipboardRead` 权限。"
+  },
+  {
+    "en": "Review a GitHub pull request; for your working diff use /code-review",
+    "zh": "审查 GitHub pull request；查看本地工作区差异用 /code-review"
+  },
+  {
+    "en": "High performance Node.js image processing, the fastest module to resize JPEG, PNG, WebP, GIF, AVIF and TIFF images",
+    "zh": "高性能 Node.js 图像处理库，调整 JPEG、PNG、WebP、GIF、AVIF、TIFF 图像尺寸的最快模块"
+  },
+  {
+    "en": "Queue multiple teach steps in one tool call. Parallels computer_batch: ",
+    "zh": "在单次工具调用中排入多个教学步骤。与 computer_batch 并行："
+  },
+  {
+    "en": "Show one guided-tour tooltip and wait for the user to click Next. On Next, execute the actions, ",
+    "zh": "显示一个引导提示并等待用户点击「下一步」。点击后执行操作，"
+  },
+  {
+    "en": "Time a command",
+    "zh": "为命令计时"
+  },
+  {
+    "en": "Run a command with a time limit",
+    "zh": "在时间限制内运行命令"
+  },
+  {
+    "en": "Wait for a specified duration.",
+    "zh": "等待指定时长。"
+  },
+  {
+    "en": "Write text to the clipboard. Requires the `clipboardWrite` grant.",
+    "zh": "将文本写入剪贴板。需要 `clipboardWrite` 权限。"
   }
 ]
