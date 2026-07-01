@@ -307,11 +307,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File uninstall.ps1
 
 ## Skill / 插件命令说明自动汉化
 
-除了 cli.js 界面文字和 spinner，本插件还会**自动汉化 skill 和插件的 `/` 命令功能说明**——安装新 skill/插件后，下次启动 Claude Code 时，它们在 `/` 命令列表、`/skill`、`/plugin` 界面里的描述会自动变成中文。
+除了 cli.js 界面文字和 spinner，本插件还会**自动汉化 skill、插件命令、内置命令的功能说明**——安装新 skill/插件后，下次启动 Claude Code 时，它们在 `/` 命令列表、`/skill`、`/plugin` 界面里的描述会自动变成中文。
 
 - **自动触发**：SessionStart hook 后台增量扫描，无需手动操作。
-- **覆盖范围**：用户 skill/command、插件 skill/command、插件元数据（`plugin.json` / `marketplace.json`）。
+- **覆盖范围**：用户与插件的 skill/command（递归扫描 `~/.claude/{skills,commands}` + `plugins/{cache,marketplaces}`，含 `.agents/.cursor/.kiro` 等子目录）、插件元数据（`plugin.json` / `marketplace.json`）。
+- **内置命令补刀**：CC 自带命令（`/cd`、`deep-research`、`/design-sync` 等）的描述硬编码在 native binary 里，`patch-cli.js` 扫不到——由 `patch-builtin.js` 做等长字节替换补刀（白名单维护，详见 [`plugin/skill-i18n/README.md`](plugin/skill-i18n/README.md)）。
 - **翻译引擎**：默认用 `claude` CLI（零配置）；可配 OpenAI / Anthropic 兼容 API 加速。
+- **防止 patch 失效**：安装时检测 CC 自动更新，未禁用则警告并提供 `ZH_CN_DISABLE_CC_AUTOUPDATE=1` 一键禁用（CC 升级会下载全新 binary，patch 全丢）。
 - **可逆**：原文备份，`restore.js --all` 一键还原，卸载时自动还原。
 
 详细配置（环境变量、API 接入、权衡说明）见 [`plugin/skill-i18n/README.md`](plugin/skill-i18n/README.md)。
