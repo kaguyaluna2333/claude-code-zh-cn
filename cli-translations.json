@@ -7612,5 +7612,21 @@
   {
     "en": "Write text to the clipboard. Requires the `clipboardWrite` grant.",
     "zh": "将文本写入剪贴板。需要 `clipboardWrite` 权限。"
+  },
+  {
+    "en": "Authorize design-system access for /design-sync with your claude.ai account",
+    "zh": "为 /design-sync 授权 design-system 访问你的 claude.ai 账号"
+  },
+  {
+    "en": "Authorize design-system access (read and write your organization's claude.ai/design projects) with your claude.ai account. This is separate from this session's authentication and changes nothing else.",
+    "zh": "授权 design-system 访问（读写你组织的 claude.ai/design 项目）你的 claude.ai 账号。这与本会话的认证相互独立，不改变其他任何设置。"
+  },
+  {
+    "en": "Push a React design system to claude.ai/design. This runs a converter that bundles the real component code (from Storybook or a bare package) and uploads it. Use when the user runs /design-sync or says \"sync my design system to Claude Design\".",
+    "zh": "将 React 设计系统推送到 claude.ai/design。运行转换器打包真实组件代码（来自 Storybook 或裸包）并上传。当用户运行 /design-sync 或说“同步我的设计系统到 Claude Design”时使用。"
+  },
+  {
+    "en": "Deep research harness \\u2014 fan-out web searches, fetch sources, adversarially verify claims, synthesize a cited report.",
+    "zh": "深度研究框架 \\u2014 并行网络搜索、抓取来源、对抗式验证论断、综合出带引用的报告。"
   }
 ]
