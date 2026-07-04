@@ -109,11 +109,14 @@ function patchBuffer(buf, zhMap, dryRun) {
 
 function main() {
   const args = process.argv.slice(2);
-  const binPath = args.find((a) => !a.startsWith("-") && a);
+  const positional = args.filter((a) => !a.startsWith("-"));
+  const binPath = positional[0];
   const dryRun = args.includes("--dry-run");
-  // translations 路径：显式参数 > 默认 ../cli-translations.json
-  const translationsPath = args.find((a) => !a.startsWith("-") && a && a !== binPath)
-    || path.join(__dirname, "..", "cli-translations.json");
+  // translations 路径：显式参数 > 同目录（安装态扁平结构）> ../（项目源 plugin/ 的父目录）
+  const translationsPath = positional[1]
+    || (fs.existsSync(path.join(__dirname, "cli-translations.json"))
+      ? path.join(__dirname, "cli-translations.json")
+      : path.join(__dirname, "..", "cli-translations.json"));
 
   // 无 binary 参数时静默退出（exit 0）：本工具被 install.sh / session-start 用 `|| true` 调用，
   // 静默退出避免被当成 hook 失败误报；缺参数属于调用方编排问题，不是本工具的错误。

@@ -1287,7 +1287,7 @@ patch_native_binary() {
         # patch-builtin: 补刀 patch-cli.js 扫不到的 builtin 命令描述
         # （B1 转义引号内嵌 \"...\" / B2 bun data 段），等长 Buffer 替换 + 重签 + 验签
         if [ -f "$PLUGIN_SRC/patch-builtin.js" ]; then
-            node "$PLUGIN_SRC/patch-builtin.js" "$binary_path" 2>/dev/null || true
+            node "$PLUGIN_SRC/patch-builtin.js" "$binary_path" "$PLUGIN_SRC/cli-translations.json" 2>/dev/null || true
             if command -v codesign >/dev/null 2>&1; then
                 codesign --force --sign - "$binary_path" 2>/dev/null || true
                 if ! codesign --verify --strict "$binary_path" 2>/dev/null; then

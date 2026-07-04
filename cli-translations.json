@@ -7567,11 +7567,11 @@
   },
   {
     "en": "Set model for this FleetView session (not persisted)",
-    "zh": "设置本次 FleetView 会话的模型（不持久化）"
+    "zh": "设置 FleetView 会话模型（不持久化）"
   },
   {
     "en": "Run a command immune to hangups",
-    "zh": "运行不受挂断影响的命令"
+    "zh": "运行防挂断命令"
   },
   {
     "en": "Type checker for Python",
@@ -7583,7 +7583,7 @@
   },
   {
     "en": "Review a GitHub pull request; for your working diff use /code-review",
-    "zh": "审查 GitHub pull request；查看本地工作区差异用 /code-review"
+    "zh": "审查 GitHub PR；本地差异用 /code-review"
   },
   {
     "en": "High performance Node.js image processing, the fastest module to resize JPEG, PNG, WebP, GIF, AVIF and TIFF images",
@@ -7591,7 +7591,7 @@
   },
   {
     "en": "Queue multiple teach steps in one tool call. Parallels computer_batch: ",
-    "zh": "在单次工具调用中排入多个教学步骤。与 computer_batch 并行："
+    "zh": "单次调用排多个教学步骤，与 computer_batch 并行："
   },
   {
     "en": "Show one guided-tour tooltip and wait for the user to click Next. On Next, execute the actions, ",
@@ -7599,7 +7599,7 @@
   },
   {
     "en": "Time a command",
-    "zh": "为命令计时"
+    "zh": "命令计时"
   },
   {
     "en": "Run a command with a time limit",

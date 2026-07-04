@@ -7556,5 +7556,97 @@
   {
     "en": "Add Claude Code GitHub Workflow",
     "zh": "添加 Claude Code GitHub 工作流"
+  },
+  {
+    "en": "Move this session to a new working directory",
+    "zh": "将本会话切换到新的工作目录"
+  },
+  {
+    "en": "Specify files or directories to analyze (overrides config file)",
+    "zh": "指定要分析的文件或目录（覆盖配置文件）"
+  },
+  {
+    "en": "Set model for this FleetView session (not persisted)",
+    "zh": "设置 FleetView 会话模型（不持久化）"
+  },
+  {
+    "en": "Run a command immune to hangups",
+    "zh": "运行防挂断命令"
+  },
+  {
+    "en": "Type checker for Python",
+    "zh": "Python 类型检查器"
+  },
+  {
+    "en": "Read the current clipboard contents as text. Requires the `clipboardRead` grant.",
+    "zh": "以文本形式读取当前剪贴板内容。需要 `clipboardRead` 权限。"
+  },
+  {
+    "en": "Review a GitHub pull request; for your working diff use /code-review",
+    "zh": "审查 GitHub PR；本地差异用 /code-review"
+  },
+  {
+    "en": "High performance Node.js image processing, the fastest module to resize JPEG, PNG, WebP, GIF, AVIF and TIFF images",
+    "zh": "高性能 Node.js 图像处理库，调整 JPEG、PNG、WebP、GIF、AVIF、TIFF 图像尺寸的最快模块"
+  },
+  {
+    "en": "Queue multiple teach steps in one tool call. Parallels computer_batch: ",
+    "zh": "单次调用排多个教学步骤，与 computer_batch 并行："
+  },
+  {
+    "en": "Show one guided-tour tooltip and wait for the user to click Next. On Next, execute the actions, ",
+    "zh": "显示一个引导提示并等待用户点击「下一步」。点击后执行操作，"
+  },
+  {
+    "en": "Time a command",
+    "zh": "命令计时"
+  },
+  {
+    "en": "Run a command with a time limit",
+    "zh": "在时间限制内运行命令"
+  },
+  {
+    "en": "Wait for a specified duration.",
+    "zh": "等待指定时长。"
+  },
+  {
+    "en": "Write text to the clipboard. Requires the `clipboardWrite` grant.",
+    "zh": "将文本写入剪贴板。需要 `clipboardWrite` 权限。"
+  },
+  {
+    "en": "Authorize design-system access for /design-sync with your claude.ai account",
+    "zh": "为 /design-sync 授权 design-system 访问你的 claude.ai 账号"
+  },
+  {
+    "en": "Authorize design-system access (read and write your organization's claude.ai/design projects) with your claude.ai account. This is separate from this session's authentication and changes nothing else.",
+    "zh": "授权 design-system 访问（读写你组织的 claude.ai/design 项目）你的 claude.ai 账号。这与本会话的认证相互独立，不改变其他任何设置。"
+  },
+  {
+    "en": "Push a React design system to claude.ai/design. This runs a converter that bundles the real component code (from Storybook or a bare package) and uploads it. Use when the user runs /design-sync or says \"sync my design system to Claude Design\".",
+    "zh": "将 React 设计系统推送到 claude.ai/design。运行转换器打包真实组件代码（来自 Storybook 或裸包）并上传。当用户运行 /design-sync 或说“同步我的设计系统到 Claude Design”时使用。"
+  },
+  {
+    "en": "Deep research harness \\u2014 fan-out web searches, fetch sources, adversarially verify claims, synthesize a cited report.",
+    "zh": "深度研究框架 \\u2014 并行网络搜索、抓取来源、对抗式验证论断、综合出带引用的报告。"
+  },
+  {
+    "en": "Open Claude in Chrome settings",
+    "zh": "配置 Chrome 中的 Claude"
+  },
+  {
+    "en": "Grant or revoke Claude agent access to your Design projects",
+    "zh": "授予或撤销 Claude 对 Design 项目的访问"
+  },
+  {
+    "en": "Grant Claude agent access to your Design projects",
+    "zh": "授予 Claude 对 Design 项目的访问"
+  },
+  {
+    "en": "Revoke Claude agent access to your Design projects",
+    "zh": "撤销 Claude 对 Design 项目的访问"
+  },
+  {
+    "en": "Show which loaded skills are unused and costing context",
+    "zh": "显示未用的 skill 及其上下文消耗"
   }
 ]
