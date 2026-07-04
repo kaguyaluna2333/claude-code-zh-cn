@@ -7628,5 +7628,25 @@
   {
     "en": "Deep research harness \\u2014 fan-out web searches, fetch sources, adversarially verify claims, synthesize a cited report.",
     "zh": "深度研究框架 \\u2014 并行网络搜索、抓取来源、对抗式验证论断、综合出带引用的报告。"
+  },
+  {
+    "en": "Open Claude in Chrome settings",
+    "zh": "配置 Chrome 中的 Claude"
+  },
+  {
+    "en": "Grant or revoke Claude agent access to your Design projects",
+    "zh": "授予或撤销 Claude 对 Design 项目的访问"
+  },
+  {
+    "en": "Grant Claude agent access to your Design projects",
+    "zh": "授予 Claude 对 Design 项目的访问"
+  },
+  {
+    "en": "Revoke Claude agent access to your Design projects",
+    "zh": "撤销 Claude 对 Design 项目的访问"
+  },
+  {
+    "en": "Show which loaded skills are unused and costing context",
+    "zh": "显示未用的 skill 及其上下文消耗"
   }
 ]

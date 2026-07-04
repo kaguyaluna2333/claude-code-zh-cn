@@ -43,6 +43,12 @@ const BUILTIN_EN = [
   "Authorize design-system access (read and write your organization's claude.ai/design projects) with your claude.ai account. This is separate from this session's authentication and changes nothing else.",
   "Push a React design system to claude.ai/design. This runs a converter that bundles the real component code (from Storybook or a bare package) and uploads it. Use when the user runs /design-sync or says \"sync my design system to Claude Design\".",
   "Deep research harness \\u2014 fan-out web searches, fetch sources, adversarially verify claims, synthesize a cited report.",
+  // 2.1.201 新增 builtin 命令（B1 转义引号内嵌）
+  "Open Claude in Chrome settings",
+  "Grant or revoke Claude agent access to your Design projects",
+  "Grant Claude agent access to your Design projects",
+  "Revoke Claude agent access to your Design projects",
+  "Show which loaded skills are unused and costing context",
 ];
 
 // Mach-O 头部 + LOAD commands 在文件前部，bun __bun 文本段在靠后位置。
