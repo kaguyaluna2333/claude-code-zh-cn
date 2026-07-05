@@ -90,6 +90,7 @@ run bash -n plugin/bin/claude-launcher
 run bash -n plugin/hooks/session-start
 run bash -n plugin/hooks/notification
 run bash -n plugin/profile/claude-code-zh-cn.sh
+run bash -n plugin/skill-i18n/translate-skills.sh
 
 step "JavaScript syntax check"
 run node --check bun-binary-io.js
@@ -112,6 +113,15 @@ run node --check scripts/sync-readme-support-window.js
 run node --check scripts/verify-release-state.js
 run node --check scripts/verify-upstream-compat.js
 run node --check scripts/zh-cn-doctor.js
+run node --check plugin/skill-i18n/scan.js
+run node --check plugin/skill-i18n/translate.js
+run node --check plugin/skill-i18n/apply.js
+run node --check plugin/skill-i18n/restore.js
+run node --check plugin/skill-i18n/lib/frontmatter.js
+run node --check plugin/skill-i18n/lib/collect.js
+run node --check plugin/skill-i18n/lib/cjk.js
+run node --check plugin/skill-i18n/lib/cache.js
+run node --check plugin/skill-i18n/lib/metadata.js
 
 if [ "$SKIP_PAYLOAD_SOURCE" -eq 1 ]; then
   step "Check payload source edits"

@@ -6,25 +6,41 @@
 - **次版本号**：新增功能或显著改进（比如新增 patch、新增翻译）
 - **修订号**：Bug 修复和小调整（比如修正一条翻译）
 
-## [2.5.0] - 2026-07-03
+## [2.6.0] - 2026-07-05
+
+### 合并
+
+- **合并上游 v2.5.0「插件优雅降级重构」**：未验证版本自动跳过/只翻译能匹配部分，CLI 始终可用（代码层面 auto-merge）。
+- **保留本 fork 的 skill/command/builtin 汉化功能**（v2.5.0 的全部增量）：
+  - skill-i18n 流水线（scan/translate/apply/restore + collect 递归 + 防环）
+  - patch-builtin.js（B1/B2 盲区等长字节替换，补刀 patch-cli.js 扫不到的 builtin 命令描述）
+  - ensure_cc_autoupdate_disabled（防 CC 自动更新覆盖 patch）
+  - 适配 CC 2.1.201（macOS arm64 本机验证 + 5 新 builtin 命令）
+- 版本号 2.5.0 → 2.6.0（避免与上游 v2.5.0 重构 tag 混淆）。
+
+### 验证
+
+- `node --test tests/skill-i18n-*.test.js tests/patch-builtin.test.js`（72 项）
+- CC 2.1.201 macOS arm64 patch 链路：patch-cli 1418 处 + patch-builtin 23 条白名单 + codesign verify
+
+## [2.5.0] - 2026-06-25
 
 ### 新增
 
-- **npm 路径优雅降级闭环**：`patch-cli.js` 新增 `--backup` / `--status` / `--log` 参数，统一实现「备份 → patch → 语法校验 → 失败放弃写入」。re-patch 一律从同版本备份恢复干净基底，杜绝 patch 叠 patch；patch 结果必须通过 JS 语法校验（vm.Script + `node --check` 兜底，兼容 ESM）才落盘，未验证的新版本自动降级为部分翻译或保持英文，CLI 绝不会坏。
-- **错误可见性**：去掉 stderr 静默，patch 失败写入插件目录 `patch.log`（自动截断），doctor 读取并在报告中提示最近的校验失败。
-- 回归测试：新增 `tests/graceful-degradation.test.js` 覆盖备份恢复、版本变更刷新备份、partial/noop/error 状态、ESM 语法校验等场景。
+- **Skill / 插件命令说明自动汉化**：SessionStart hook 后台增量扫描，新装 skill/插件后下次启动自动把 `/` 命令功能说明翻译成中文。覆盖用户与插件的 skill、command，以及插件元数据（`plugin.json` / `marketplace.json`）。
+- 翻译引擎可配置：默认 `claude` CLI（零配置开箱即用），支持 OpenAI / Anthropic 兼容协议。
+- 全局译文缓存（按英文原文 hash），插件更新覆盖源文件后自动重应用、不重复调用 LLM。
+- 一键还原（`restore.js --all`），卸载时自动还原英文。
+- 行级 patch + 写前自检，正文内容不变（CRLF 归一化为 LF），绝不写坏 skill；占位符 `${...}`/`$ARGUMENTS` 校验、符号链接默认不跟随。
 
 ### 改进
 
-- **版本口径统一**：取消用户可见的 stable / experimental 双轨叫法，统一为「已验证版本」，语义从安全门禁改为翻译完整度（依赖降级闭环保证未验证版本可用）。内部 JSON schema key 保持不变以兼容旧版插件。
-- **README 精简**：540 行精简到约 380 行；重复多次的排除版本列表改为统一链接 [docs/support-matrix.md](docs/support-matrix.md)；生成脚本（badges / 支持范围 / 安装建议）同步简化。
-- **patch revision 收敛**：`manifest.json` 移出指纹输入（插件版本号变化不再触发无谓 re-patch），JS / shell / PowerShell 各实现输入统一。
-- CI：native candidate 验证失败不再开草稿 PR 刷屏，改为汇总到单一跟踪 Issue（幂等追加评论）。
+- 跟进上游 v2.4.62：macOS / Windows native 支持窗口推进到 Claude Code `2.1.190`。
 
-### 修复
+### 验证
 
-- npm 托管 re-patch 不再在已 patch 的 `cli.js` 上叠加二次 patch。
-- `mktemp` 依赖移除，受限环境下状态文件创建不再失败。
+- `node --test tests/skill-i18n-*.test.js`（51 项）
+- 真实 `~/.claude` 全量汉化端到端验证
 
 ## [2.4.62] - 2026-06-24
 

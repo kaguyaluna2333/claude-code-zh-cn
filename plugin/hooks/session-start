@@ -437,6 +437,7 @@ validate_staging_release() {
     [ -f "$staging_dir/plugin/manifest.json" ] || return 1
     [ -f "$staging_dir/plugin/patch-cli.sh" ] || return 1
     [ -f "$staging_dir/plugin/patch-cli.js" ] || return 1
+    [ -f "$staging_dir/plugin/patch-builtin.js" ] || return 1
     [ -f "$staging_dir/plugin/cli-translations.json" ] || return 1
     [ -f "$staging_dir/plugin/bun-binary-io.js" ] || return 1
     [ -f "$staging_dir/plugin/compute-patch-revision.sh" ] || return 1
@@ -657,6 +658,18 @@ if [ -n "$NATIVE_BINARY" ]; then
                     PATCH_COUNT=$("$PLUGIN_ROOT/patch-cli.sh" "$tmp_js" 2>/dev/null || echo "0")
                     if [ "$PATCH_COUNT" != "0" ]; then
                         if node "$PLUGIN_ROOT/bun-binary-io.js" repack "$NATIVE_BINARY" "$tmp_js" 2>/dev/null; then
+                            # patch-builtin: 补刀 patch-cli 扫不到的 builtin 命令描述（B1/B2 盲区）+ 重签 + 验签
+                            if [ -f "$PLUGIN_ROOT/patch-builtin.js" ]; then
+                                node "$PLUGIN_ROOT/patch-builtin.js" "$NATIVE_BINARY" "$PLUGIN_ROOT/cli-translations.json" 2>/dev/null || true
+                                if command -v codesign >/dev/null 2>&1; then
+                                    codesign --force --sign - "$NATIVE_BINARY" 2>/dev/null || true
+                                    if ! codesign --verify --strict "$NATIVE_BINARY" 2>/dev/null; then
+                                        # 验签失败：记日志（不静默）+ 从备份恢复
+                                        echo "$(date +%s) patch-builtin codesign verify failed" >> "$PLUGIN_ROOT/.patch-failures.log" 2>/dev/null
+                                        cp "$backup_path" "$NATIVE_BINARY" 2>/dev/null || true
+                                    fi
+                                fi
+                            fi
                             VERIFIED_VERSION="$(native_binary_version_from_execution "$NATIVE_BINARY")"
                             if [ "${VERIFIED_VERSION:-}" = "${CURRENT_VERSION:-}" ]; then
                                 FINAL_HASH=$(native_binary_hash "$NATIVE_BINARY")
@@ -723,6 +736,18 @@ elif [ -f "$CLI_FILE" ]; then
 fi
 
 repair_settings_from_cache
+
+# Skill/插件命令说明增量汉化（后台异步，不阻塞 hook 输出；新装项下次启动生效）
+if [ "${ZH_CN_SKILL_I18N_DISABLE:-0}" != "1" ] && [ -x "$PLUGIN_ROOT/skill-i18n/translate-skills.sh" ]; then
+    (
+        ZH_CN_SKILL_I18N_HOOK=1 \
+        CLAUDE_PLUGIN_ROOT="$PLUGIN_ROOT" \
+        bash "$PLUGIN_ROOT/skill-i18n/translate-skills.sh" >/dev/null 2>&1
+    ) &
+    SKILL_I18N_PID=$!
+    ( sleep "${ZH_CN_SKILL_I18N_TIMEOUT:-25}"; kill "$SKILL_I18N_PID" 2>/dev/null ) &
+    disown "$SKILL_I18N_PID" 2>/dev/null || true
+fi
 
 # 读取用户输入
 read -r INPUT

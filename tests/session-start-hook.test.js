@@ -230,6 +230,7 @@ test("session-start repairs settings from cached overlay before emitting JSON", 
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -489,6 +490,7 @@ test("session-start auto-updates only to latest release tag without mutating sou
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -559,6 +561,7 @@ test("session-start auto-update accepts older release tags without install-json-
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -613,6 +616,7 @@ test("session-start skips auto-update cleanly when source repo path is missing",
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -654,6 +658,7 @@ test("session-start skips auto-update when source repo has no release tags", () 
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -699,6 +704,7 @@ test("session-start returns valid JSON even when update fails", () => {
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -743,6 +749,7 @@ test("session-start writes .last-update-status on successful update", () => {
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -800,6 +807,7 @@ printf '1'
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -854,6 +862,7 @@ printf '1'
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -930,6 +939,7 @@ printf '1'
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -1008,6 +1018,7 @@ printf '1'
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -1058,6 +1069,7 @@ printf '1'
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",
@@ -1128,6 +1140,7 @@ printf 'invoked' > ${JSON.stringify(invokedFile)}
       PATH: `${fakeBin}:${process.env.PATH}`,
       ZH_CN_UPDATE_CHECK_INTERVAL_SECONDS: "0",
       GIT_TERMINAL_PROMPT: "0",
+      ZH_CN_SKILL_I18N_DISABLE: "1", // 本测试不关心 skill 翻译，跳过后台调用避免副作用
     },
     input: "\n",
     encoding: "utf8",

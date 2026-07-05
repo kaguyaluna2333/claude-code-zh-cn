@@ -37,6 +37,47 @@ print_updater_boundary_note() {
     echo -e "  ${YELLOW}!${NC} Claude Code 本体自动升级 → DISABLE_AUTOUPDATER 不归本插件兜底；请以 claude doctor 的 Updates 段为准"
 }
 
+# 检测 CC 是否已禁用自动更新；未禁用时警告，ZH_CN_DISABLE_CC_AUTOUPDATE=1 则主动写入 shell profile。
+# patch 在 CC 自动更新下载全新 binary 后会失效，禁用自动更新是保持汉化持久的前提。
+ensure_cc_autoupdate_disabled() {
+    # 已通过环境变量禁用？
+    if [ "${DISABLE_AUTOUPDATER:-}" = "1" ] || [ "${DISABLE_AUTOUPDATER:-}" = "true" ]; then
+        return 0
+    fi
+    # 已在 settings.json env 禁用？
+    if command -v node >/dev/null 2>&1 && [ -f "$SETTINGS_FILE" ]; then
+        if node -e 'const e=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8")).env||{};process.exit((e.DISABLE_AUTOUPDATER==="1"||e.DISABLE_AUTOUPDATER==="true")?0:1)' "$SETTINGS_FILE" 2>/dev/null; then
+            return 0
+        fi
+    fi
+    # 已在 shell profile 禁用？列举六种常见写法（裸值/双引号/单引号 × 1/true），覆盖不同用户 export 习惯；
+    # 不用反向引用 \2，保证 BSD grep / ugrep 兼容
+    local profile
+    for profile in "$HOME/.zshrc" "$HOME/.bashrc" "$HOME/.profile"; do
+        [ -f "$profile" ] || continue
+        if grep -qE '^[[:space:]]*(export[[:space:]]+)?DISABLE_AUTOUPDATER=(1|true|"1"|"true"|'"'"'1'"'"'|'"'"'true'"'"')([[:space:]]|$|#)' "$profile" 2>/dev/null; then
+            return 0
+        fi
+    done
+
+    # 未禁用：警告 or 主动写 profile
+    if [ "${ZH_CN_DISABLE_CC_AUTOUPDATE:-0}" = "1" ]; then
+        local target="$HOME/.zshrc"
+        [ -n "${SHELL##*zsh*}" ] && [ -f "$HOME/.bashrc" ] && target="$HOME/.bashrc"
+        if ! grep -qE '^\s*(export\s+)?DISABLE_AUTOUPDATER=' "$target" 2>/dev/null; then
+            {
+                echo ""
+                echo "# 禁用 Claude Code 自动更新（由 claude-code-zh-cn 安装脚本添加，防止 CC 升级后 patch 失效）"
+                echo "export DISABLE_AUTOUPDATER=1"
+            } >> "$target"
+            echo -e "  ${GREEN}✓${NC} 已在 $target 添加 export DISABLE_AUTOUPDATER=1（重新打开终端后生效）"
+        fi
+    else
+        echo -e "  ${YELLOW}!${NC} Claude Code 自动更新未禁用：CC 升级后 patch 会失效，需重新安装"
+        echo -e "      一键禁用：重跑安装时加 ZH_CN_DISABLE_CC_AUTOUPDATE=1，或手动在 shell profile 加 export DISABLE_AUTOUPDATER=1"
+    fi
+}
+
 print_unpublished_window_note() {
     echo -e "${YELLOW}  提醒：本机自验证是临时 patch，不等于已发布支持；升到未发布窗口时请先看支持窗口，未收录就等插件 Release 或临时退回已验证版本。${NC}"
 }
@@ -1260,6 +1301,18 @@ patch_native_binary() {
             rm -f "$tmp_js"
             return
         }
+        # patch-builtin: 补刀 patch-cli.js 扫不到的 builtin 命令描述
+        # （B1 转义引号内嵌 \"...\" / B2 bun data 段），等长 Buffer 替换 + 重签 + 验签
+        if [ -f "$PLUGIN_SRC/patch-builtin.js" ]; then
+            node "$PLUGIN_SRC/patch-builtin.js" "$binary_path" "$PLUGIN_SRC/cli-translations.json" 2>/dev/null || true
+            if command -v codesign >/dev/null 2>&1; then
+                codesign --force --sign - "$binary_path" 2>/dev/null || true
+                if ! codesign --verify --strict "$binary_path" 2>/dev/null; then
+                    echo -e "${RED}patch-builtin 后签名校验失败，从备份恢复...${NC}"
+                    cp "$backup_path" "$binary_path" 2>/dev/null || true
+                fi
+            fi
+        fi
         local verified_version
         echo -e "  正在运行 --version 做本机启动自检..."
         verified_version="$(native_binary_version_from_execution "$binary_path")"
@@ -1349,6 +1402,8 @@ main() {
     if [ "$UPDATE_ONLY" != true ]; then
         initial_patch_cli
     fi
+
+    ensure_cc_autoupdate_disabled
 
     print_completion
 }
