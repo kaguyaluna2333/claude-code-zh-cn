@@ -49,6 +49,13 @@ const BUILTIN_EN = [
   "Grant Claude agent access to your Design projects",
   "Revoke Claude agent access to your Design projects",
   "Show which loaded skills are unused and costing context",
+  // 2.1.201 bundled skill/agent 描述（模板字面量，patch-cli 扫不到）
+  "Create or customize a shareable plan Artifact from an implementation plan, design doc, or RFC. Use when asked to publish a plan as an artifact, restyle or edit a plan artifact, or present a plan as a shareable page.",
+  "Implementation plans, technical designs, RFCs, and architecture proposals \\u2014 a phased document with context, approach, and verification sections.",
+  "Design guidance and fundamentals for Artifacts.",
+  "Use this agent when the user asks for a thorough code review or wants detailed analysis of code quality, security, and best practices.",
+  "Use this agent when the user needs to analyze tickets, triage incoming issues, or prioritize a backlog.",
+  "Verify that a code change actually does what it's supposed to by exercising it end-to-end and observing behavior \\u2014 drive the affected flow, not just tests or typecheck. Run before committing nontrivial changes; bootstraps this repo's project verify skill if none exists yet. Don't invoke it on a diff that only touches tests, docs, or other code with no runtime surface to drive (a change to product source always has one) \\u2014 there's nothing to observe.",
 ];
 
 // Mach-O 头部 + LOAD commands 在文件前部，bun __bun 文本段在靠后位置。
