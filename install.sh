@@ -1301,16 +1301,12 @@ patch_native_binary() {
             rm -f "$tmp_js"
             return
         }
-        # patch-builtin: 补刀 patch-cli.js 扫不到的 builtin 命令描述
-        # （B1 转义引号内嵌 \"...\" / B2 bun data 段），等长 Buffer 替换 + 重签 + 验签
-        if [ -f "$PLUGIN_SRC/patch-builtin.js" ]; then
-            node "$PLUGIN_SRC/patch-builtin.js" "$binary_path" "$PLUGIN_SRC/cli-translations.json" 2>/dev/null || true
-            if command -v codesign >/dev/null 2>&1; then
-                codesign --force --sign - "$binary_path" 2>/dev/null || true
-                if ! codesign --verify --strict "$binary_path" 2>/dev/null; then
-                    echo -e "${RED}patch-builtin 后签名校验失败，从备份恢复...${NC}"
-                    cp "$backup_path" "$binary_path" 2>/dev/null || true
-                fi
+        # repack 改了 binary，必须重签（ad-hoc）+ 验签，失败从备份恢复
+        if command -v codesign >/dev/null 2>&1; then
+            codesign --force --sign - "$binary_path" 2>/dev/null || true
+            if ! codesign --verify --strict "$binary_path" 2>/dev/null; then
+                echo -e "${RED}签名校验失败，从备份恢复...${NC}"
+                cp "$backup_path" "$binary_path" 2>/dev/null || true
             fi
         fi
         local verified_version

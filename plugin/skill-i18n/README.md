@@ -9,11 +9,11 @@
 1. 插件的 `SessionStart` hook 在会话启动末尾**后台异步**调用 `translate-skills.sh`（不阻塞启动）。
 2. 流水线扫描所有来源（`collect.js` 递归），解析 frontmatter / JSON，与缓存对比，**只翻译新增或改动的项**。
 3. 译文写回源文件（备份原文），下次启动即生效。
-4. CC 自带命令描述由 `patch-builtin.js` 在 native patch 流程里补刀（`install.sh` 安装时 + `session-start` 自愈时）。
-5. 安装时检测并提示禁用 CC 自动更新（防止升级覆盖 patch）。
+4. 安装时检测并提示禁用 CC 自动更新（防止升级覆盖 patch）。
 
 skill/command 翻译三阶段：`scan`（扫描+解析+对比缓存）→ `translate`（调翻译引擎）→ `apply`（写回）。
-builtin 命令描述：`patch-cli.js`（JS 文本段）→ `patch-builtin.js`（B1/B2 盲区等长补刀）→ codesign 重签 + 验签。
+
+> CC 自带命令（`/cd`、`/help` 等）的汉化属于 cli.js patch 范畴（上游维护），不在本功能内。
 
 ## 翻译范围
 
@@ -33,26 +33,9 @@ builtin 命令描述：`patch-cli.js`（JS 文本段）→ `patch-builtin.js`（
 
 > ⚠️ **CC 不加载符号链接 skill**：Claude Code 用 `isDirectory()` 判断 skill 目录，符号链接返回 false → CC 跳过。即使翻译了符号链接 skill 的文件，CC 也不显示。如需 CC 加载，把符号链接替换为真实目录（`cp -R` 替代 `ln -s`）。
 
-## 内置命令描述汉化（patch-builtin.js）
-
-CC 自带命令（`/cd`、`deep-research`、`/design-sync`、`/terminal-setup` 等）的描述硬编码在 native binary 里，不在 SKILL.md / command 文件中。`patch-cli.js` 的字符串扫描器只认 JS 文本段的 `"..."` 和模板字面量，扫不到两类盲区：
-
-- **B1 转义引号内嵌**：`"description:\"...\""`（对象被序列化成字符串，内层 `\"` 是内容）
-- **B2 bun data 段**：序列化命令定义，不在 JS 文本段
-
-`patch-builtin.js` 对这些盲区做**等长字节替换**补刀（在 `patch-cli.js` 之后跑）：
-
-- **白名单设计**：只处理已确认的 B1/B2 builtin 命令描述（`BUILTIN_EN`，约 23 条），不对整个翻译表做 `indexOf`——避免误伤 binary 里的代码标识符 / URL / 协议文本。
-- **等长替换**：中文不足填半角空格、超长按字符截断，保证不破坏 binary 偏移；保留 `${}` 占位符（含占位符的条目跳过）。
-- **offset 保护**：跳过 `< 16KB` 的命中（Mach-O 头部 LOAD 区）。
-- **数据源单一**：zh 译文从 `cli-translations.json` 按 `en` 查（白名单只存 en 原文）。
-- **签名**：替换后由调用方（`install.sh` / `session-start` hook）`codesign --force --sign -` 重签 + `codesign --verify --strict` 验签，失败从备份恢复。
-
-CC 升级新增 builtin 命令时，在 `patch-builtin.js` 的 `BUILTIN_EN` 白名单 + `cli-translations.json` 各加一条。
-
 ## 防止 patch 失效（CC 自动更新）
 
-CC 默认自动更新，每次升级下载全新 binary，**所有 patch 全丢**（cli.js patch + patch-builtin 补刀）。`install.sh` 的 `ensure_cc_autoupdate_disabled` 检测三处：
+CC 默认自动更新，每次升级下载全新 binary，**cli.js patch 全丢**。`install.sh` 的 `ensure_cc_autoupdate_disabled` 检测三处：
 
 1. 环境变量 `DISABLE_AUTOUPDATER=1`
 2. `settings.json` 的 `env.DISABLE_AUTOUPDATER`

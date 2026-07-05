@@ -437,7 +437,6 @@ validate_staging_release() {
     [ -f "$staging_dir/plugin/manifest.json" ] || return 1
     [ -f "$staging_dir/plugin/patch-cli.sh" ] || return 1
     [ -f "$staging_dir/plugin/patch-cli.js" ] || return 1
-    [ -f "$staging_dir/plugin/patch-builtin.js" ] || return 1
     [ -f "$staging_dir/plugin/cli-translations.json" ] || return 1
     [ -f "$staging_dir/plugin/bun-binary-io.js" ] || return 1
     [ -f "$staging_dir/plugin/compute-patch-revision.sh" ] || return 1
@@ -658,16 +657,12 @@ if [ -n "$NATIVE_BINARY" ]; then
                     PATCH_COUNT=$("$PLUGIN_ROOT/patch-cli.sh" "$tmp_js" 2>/dev/null || echo "0")
                     if [ "$PATCH_COUNT" != "0" ]; then
                         if node "$PLUGIN_ROOT/bun-binary-io.js" repack "$NATIVE_BINARY" "$tmp_js" 2>/dev/null; then
-                            # patch-builtin: 补刀 patch-cli 扫不到的 builtin 命令描述（B1/B2 盲区）+ 重签 + 验签
-                            if [ -f "$PLUGIN_ROOT/patch-builtin.js" ]; then
-                                node "$PLUGIN_ROOT/patch-builtin.js" "$NATIVE_BINARY" "$PLUGIN_ROOT/cli-translations.json" 2>/dev/null || true
-                                if command -v codesign >/dev/null 2>&1; then
-                                    codesign --force --sign - "$NATIVE_BINARY" 2>/dev/null || true
-                                    if ! codesign --verify --strict "$NATIVE_BINARY" 2>/dev/null; then
-                                        # 验签失败：记日志（不静默）+ 从备份恢复
-                                        echo "$(date +%s) patch-builtin codesign verify failed" >> "$PLUGIN_ROOT/.patch-failures.log" 2>/dev/null
-                                        cp "$backup_path" "$NATIVE_BINARY" 2>/dev/null || true
-                                    fi
+                            # repack 后重签 + 验签，失败记日志 + 从备份恢复
+                            if command -v codesign >/dev/null 2>&1; then
+                                codesign --force --sign - "$NATIVE_BINARY" 2>/dev/null || true
+                                if ! codesign --verify --strict "$NATIVE_BINARY" 2>/dev/null; then
+                                    echo "$(date +%s) codesign verify failed" >> "$PLUGIN_ROOT/.patch-failures.log" 2>/dev/null
+                                    cp "$backup_path" "$NATIVE_BINARY" 2>/dev/null || true
                                 fi
                             fi
                             VERIFIED_VERSION="$(native_binary_version_from_execution "$NATIVE_BINARY")"

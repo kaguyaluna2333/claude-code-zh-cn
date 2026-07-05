@@ -6,6 +6,21 @@
 - **次版本号**：新增功能或显著改进（比如新增 patch、新增翻译）
 - **修订号**：Bug 修复和小调整（比如修正一条翻译）
 
+## [2.7.0] - 2026-07-05
+
+### 重构
+
+- **删除 patch-builtin 机制**：汉化 CC 自带 builtin 命令（/cd、/dataviz 等）超出本 fork 范围（属上游职责）。移除 `patch-builtin.js`、`BUILTIN_EN` 白名单、install.sh/session-start 接线、测试。
+- **cli-translations.json 回退上游基线 1890**：丢弃 30 条混入的 CC builtin/bundled skill 本机翻译结果（dataviz/plan/verify/cd/chrome/design 等），这些是运行时产物，不是项目数据。
+- **回归本职**：只保留 skill-i18n 流水线（用户安装 skill/command 的 LLM 翻译）。CC 升级后 session-start 自愈只 patch-cli（repack + codesign 重签）。
+- repack 后的 codesign 重签保留（搬到无条件执行，patch-builtin 删除不影响签名链）。
+
+### 验证
+
+- `node --test tests/skill-i18n-*.test.js`（58 项）
+- cli-translations.json 1890 条（与上游一致）
+- grep 确认无 patch-builtin 残留引用
+
 ## [2.6.0] - 2026-07-05
 
 ### 合并
