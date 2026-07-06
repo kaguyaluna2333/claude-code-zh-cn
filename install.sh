@@ -1301,12 +1301,15 @@ patch_native_binary() {
             rm -f "$tmp_js"
             return
         }
-        # repack 改了 binary，必须重签（ad-hoc）+ 验签，失败从备份恢复
+        # repack 改了 binary，必须重签（ad-hoc）+ 验签，失败从备份恢复并退出（不能落入自检报假成功）
         if command -v codesign >/dev/null 2>&1; then
             codesign --force --sign - "$binary_path" 2>/dev/null || true
             if ! codesign --verify --strict "$binary_path" 2>/dev/null; then
                 echo -e "${RED}签名校验失败，从备份恢复...${NC}"
                 cp "$backup_path" "$binary_path" 2>/dev/null || true
+                CLI_PATCH_STATUS_SUMMARY="已跳过（原生二进制 codesign 验签失败）"
+                rm -f "$tmp_js"
+                return
             fi
         fi
         local verified_version
